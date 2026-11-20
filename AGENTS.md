@@ -10,9 +10,9 @@
 
 ## 폴더 — 다섯 줄만 (전체 표는 `harness/guides/지도.md`)
 - **세팅 전부터 작업 공간에 있던 파일은 종류와 상관없이 전부 과제 원본이다**(목록은 과제설정 1절). 지우거나 옮기거나 덮어쓰지 않는다 — 소유 경로·청소 대상이어도 같다. 예외는 과제설정이 「채움」으로 적은 양식뿐이고, 애매하면 사용자에게 묻는다. `메모.md` 는 사용자 것 — 에이전트는 읽지도 고치지도 않는다.
-- 채점용 정본은 `docs/`(PROBLEM · SOLUTION · ARCHITECTURE · PLAN · DECISIONS). 제품은 `src/<모듈>/` + `tests/<모듈>/`, 화면은 `src/ui/`, 계약 테스트 `tests/contract/` 는 오케, 서버(`scripts/run.sh`·포트 3000)는 통합 워커, E2E·Dockerfile·실행 안내의 실행·테스트 절은 검증 워커.
+- 채점용 정본은 `docs/`(PROBLEM · SOLUTION · ARCHITECTURE · PLAN · DECISIONS). 제품은 `src/<모듈>/` + `tests/<모듈>/`, 화면은 `src/ui/`, 계약 테스트 `tests/contract/` 는 오케, 서버(`scripts/run.sh`·포트 3000)는 통합 워커, E2E·Dockerfile·실행 안내의 실행·테스트 절은 검증 워커. `docs/우편함/` 은 방식 B 의 세션 간 우편함(커밋하지 않는다 — 아래 「세션 등록」).
 - 스킬은 `.agents/skills/`, 역할·단계·시작점·도구는 `harness/`(사람은 열 일 없다).
-- 루트 `사람용-지침.md` — 사람이 시험 중 보는 한 장(판단 기준 셋 · 3시간 시간표). 에이전트는 사용자가 시킬 때만 고친다.
+- 루트 `사람용-지침.md`(판단 기준 셋 · 3시간 시간표) · `Codex-앱-조작.md`(Codex 앱 조작 · 실측 4단계 · 우편함 사용법) — 사람이 시험 중 보는 한 장씩. 에이전트는 사용자가 시킬 때만 고친다.
 - 폴더 밖에는 시스템 임시 폴더(`/tmp` — 로그 · `submit` 클린 재현)에만 쓴다. 과제 지침이 임시 폴더까지 막는다고 읽히면 **건너뛰지 말고** 작업 공간 안 `.tmp-clean/`(`.git/info/exclude` 에 넣고 끝나면 지운다)에서 같은 일을 한다. 스킬 전역 등록(`install_skills.py`)은 사용자가 시킬 때만. `setup.sh` 는 폴더 밖에 쓰지 않는다. `CODEX_HOME`·`TMP` 는 바꾸지 않는다.
 
 ## 실행 환경
@@ -20,7 +20,8 @@
 - 메모리 16GB(본인 프로세스 OOM 은 구제 없음) · 제출 전체 10GB 이하. 다 쓴 자기 서버·빌드는 끈다.
 - 웹 서버는 빌드된 화면 + API 를 한 서버로 `0.0.0.0:3000` 에. 사람에게 안내하는 법은 `harness/guides/BROWSER.md`.
 - 검증은 `harness/verify.sh "<명령>"` 으로 돌리고 출력으로 말한다. 0 PASS · 1 FAIL · 2 NOVERIFY(테스트 0개는 통과가 아니다). 기록에 기준 커밋이 붙는다 — 커밋이 바뀌면 옛 PASS 를 승계하지 않는다.
-- 상태줄 `context-used` 40% 근처면 승계 준비(`$handoff`), 50% 를 넘긴 작업은 신뢰하지 않는다.
+- 상태줄 `context-used` 40% 근처면 승계 준비(`$handoff`), 50% 를 넘긴 작업은 신뢰하지 않는다. **B 일 때**: 상시 표시가 없으면 사람이 `/status` 로 확인한다.
+- **작업 방식 A/B** — 이 시험의 Codex 는 앱일 수 있어 세팅 직후 4가지를 실측해 `docs/과제설정.md` 7절에 적는다(`Codex-앱-조작.md` 2절, 판정 전에는 B). **A = 터미널 CLI**: 「탭」은 `codex` 세션 하나 — 「새 탭」은 앱 내장 터미널(``Ctrl+` ``)의 새 터미널 → `codex` 로 읽고, 문서의 `/permissions`·`/quit → codex resume`·`codex queue` 를 그대로 쓴다. **B = 앱 chat**: 「탭」은 사이드바 chat 하나(새 chat Ctrl+N 또는 `/new` · 이름 Ctrl+Alt+R 로 역할명 · Codex 모드·Local 확인), `/permissions` 는 입력창(composer) 아래 권한 컨트롤의 Full access(없으면 Ask for approval), `/quit → codex resume` 은 새 chat 을 열고 인계 파일(`$handoff`)을 읽히기(같은 맥락에서 갈라 갈 때 `/fork`), 세션 간 전달은 `codex queue` 대신 우편함. 이 키트 어디서든 「queue」는 세션 간 전달 일반을 뜻한다 — A 는 `codex queue`, B 는 우편함. 서브에이전트: 앱은 메인 chat activity 에서 서브에이전트 스레드를 연다.
 - 플랫폼 모델 게이트웨이 오류(401 등)는 **신고만** 한다(시각·코드·경로). `.env` 를 고치거나 토큰을 출력하거나 재시도를 반복하지 않는다. 앱 자체의 401 과 구분한다.
 
 ## 역할 정하기 — 첫 지시가 정한다
@@ -31,7 +32,9 @@
 - 서브에이전트는 띄운 쪽의 프롬프트·파일만 따르고 세션.txt 에 등록하지 않는다.
 - 어느 쪽도 아니면 한 줄 묻는다. 다른 역할의 규칙은 따르지 않는다.
 
-**세션 등록**: 탭 세션은(이어받는 새 오케는 줄 교체 — `$handoff`) 첫 행동으로 `echo "<역할> $CODEX_THREAD_ID 탭 보고→<상대>" >> docs/세션.txt`(워커의 상대는 오케). 다른 세션엔 이 파일의 UUID 로 `codex queue --thread <UUID> --message "[<나>→<상대>] …"`(「Queued」는 접수이지 반영이 아니다). 닫을 때 줄 끝에 `(닫힘)`. 상세 `$handoff`.
+**세션 등록**: 탭 세션은(이어받는 새 오케는 줄 교체 — `$handoff`) 첫 행동으로 `echo "<역할> $CODEX_THREAD_ID 탭 보고→<상대>" >> docs/세션.txt`(워커의 상대는 오케). 다른 세션엔 이 파일의 UUID 로 `codex queue --thread <UUID> --message "[<나>→<상대>] …"`(「Queued」는 접수이지 반영이 아니다 — **B 일 때는 우편함**, 아래). 닫을 때 줄 끝에 `(닫힘)`. 상세 `$handoff`.
+**B 일 때(세션 등록)**: `CODEX_THREAD_ID` 가 비면 `/status` 의 chat ID 를 사용자에게 받아 적는다(모르면 ID 칸에 `-`, 역할명만으로도 된다).
+**B 일 때(전달 = 우편함, `codex queue` 대신)**: 보내는 쪽이 `docs/우편함/<받는역할>.md` 끝에 `[<나>→<상대> HH:MM] 내용` 블록을 **append**(`>>`, 파일이 없으면 만든다 — 시각은 KST)하고 **커밋하지 않는다**(`docs/우편함/` 은 `.git/info/exclude` 로 빠져 있다 — 커밋 타임라인·`git status` 가 안 섞인다). 그리고 사용자에게 「<받는역할> chat 에 `우편함` 이라고 쳐 주세요」 한 줄. 사람이 받는 chat 에 「우편함」 한 단어를 치면, 받는 쪽은 자기 파일을 읽고 `(읽음 …)` 이 없는 블록을 처리한 뒤 그 블록 아래에 `(읽음 HH:MM)` 을 단다. 「보냄」은 「반영됨」이 아니다 — 반영은 상대의 답 우편으로 확인한다. 전체 공지는 세션.txt 의 `(닫힘)` 없는 역할마다 한 블록씩.
 
 ## 판단 원칙
 1. **원문 전부가 요구다.** README 만 아니라 과제설정 1절의 파일 전부(출력 계약 · 데이터 설명 · 양식)를 읽고 요구 표를 만든다. 빈칸·어긋난 칸만 실무자에게 묻는다. MUST 를 닫기 전에 선택 항목을 시작하지 않는다.
@@ -57,6 +60,6 @@
 
 ## 스킬 · 시크릿
 - 스킬은 `$이름`(`handoff` `verify` `decision` `evaluate` `design-review` `security` `submit` `grilling` `systematic-debugging`). 안 잡히면 `.agents/skills/<이름>/SKILL.md` 를 직접 읽는다. 작업 폴더 밖 스킬·MCP 는 쓰지 않는다.
-- **사용자가 새 스킬을 만들자고 하면** `.agents/skills/<이름>/SKILL.md`(머리에 `name`·`description`)로 만들고, `python3 harness/tools/check_skills.py --workspace .` 로 인식을 확인하고, `$decision` 한 줄(왜 만들었나)과 함께 커밋한다. 떠 있는 탭의 `$` 목록에 안 보이면 `/quit` → `codex resume`. 에이전트가 먼저 만들자고 하지 않는다.
+- **사용자가 새 스킬을 만들자고 하면** `.agents/skills/<이름>/SKILL.md`(머리에 `name`·`description`)로 만들고, `python3 harness/tools/check_skills.py --workspace .` 로 인식을 확인하고, `$decision` 한 줄(왜 만들었나)과 함께 커밋한다. 떠 있는 탭의 `$` 목록에 안 보이면 `/quit` → `codex resume`(B 일 때는 연 폴더가 작업 공간 루트인지 보고 새 chat 을 연다). 에이전트가 먼저 만들자고 하지 않는다.
 - 출력·queue 문장에 한글·영문 외 문자(한자·가나)가 섞이면 보내기 전에 다시 쓴다.
 - 키·토큰은 `.env` 에만, `.env.example` 에 이름만. 코드·커밋·로그에 값 금지.

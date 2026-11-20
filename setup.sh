@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # setup.sh — 클론한 하네스를 작업 공간에 합친다. 에이전트가 README 「세팅」 절대로 실행한다.
 # 사용: (작업 공간에서) bash probe-harness-krafton/setup.sh [작업공간]
-# 결과: 루트에 AGENTS.md·사람용-지침.md·docs/·.agents/·harness/(guides·roles·starter·tools·vendor·pitch·verify.sh) 가 생긴다.
+# 결과: 루트에 AGENTS.md·사람용-지침.md·Codex-앱-조작.md·docs/(우편함/ 포함)·.agents/·harness/(guides·roles·starter·tools·vendor·pitch·verify.sh) 가 생긴다.
 #   작업공간 기본값 = 현재 폴더. 클론 폴더 안에서 실행했으면 그 부모.
 # 규칙: 과제가 준 파일은 덮어쓰지 않는다. AGENTS.md 만 예외 — 우리 것 + 원래 내용을 맨 끝 절에 붙인다.
 set -eu
@@ -65,6 +65,12 @@ if [ -n "$KEPT" ] && [ -z "$RERUN" ]; then echo "보존(과제 파일, 안 덮�
 if [ -e "$SRC/사람용-지침.md" ]; then
   case " $KEPT " in *" 사람용-지침.md "*) echo "사람용-지침.md: 과제 원본과 이름이 겹쳐 안 덮었다";; *) [ -e 사람용-지침.md ] && echo "사람용-지침.md: 작업 공간 루트에 깔았다";; esac
 fi
+# Codex-앱-조작.md — 위 2 의 루프가 사람용-지침.md 와 같은 방식으로 깐다(킷에 없으면 건너뜀 · 과제 원본과 이름이 겹치면 안 덮음).
+if [ -e "$SRC/Codex-앱-조작.md" ]; then
+  case " $KEPT " in *" Codex-앱-조작.md "*) echo "Codex-앱-조작.md: 과제 원본과 이름이 겹쳐 안 덮었다";; *) [ -e Codex-앱-조작.md ] && echo "Codex-앱-조작.md: 작업 공간 루트에 깔았다";; esac
+fi
+# docs/우편함/ — 방식 B(앱 chat)의 세션 간 우편함. git 은 빈 폴더를 못 담으니 여기서 만들고, 커밋 타임라인에 안 섞이게 아래 4 에서 .git/info/exclude 에 넣는다.
+mkdir -p docs/우편함 || echo "docs/우편함 을 못 만들었다 — 방식 B 우편함은 에이전트가 첫 우편 때 만든다"
 CLASH="$(printf '%s' "$KEPT" | tr ' ' '\n' | grep -vxF -e '.gitignore' -e '.env.example' -e '.gitattributes' | sed '/^$/d' | tr '\n' ' ' || true)"
 CLASH_NOTE=""
 if [ -n "$CLASH" ] && [ -z "$RERUN" ]; then CLASH_NOTE="   이름 충돌(과제 파일을 보존해 킷 파일이 안 깔림): ${CLASH}
@@ -125,6 +131,9 @@ for rule in ".env" ".env.*" "!.env.example" "*.key" "*.pem" "credentials*.json" 
   grep -qxF -- "$rule" .gitignore 2>/dev/null || echo "$rule" >> .gitignore
 done
 if [ -d "$SRC/.git" ]; then echo "/$(basename "$SRC")/" >> .git/info/exclude; fi   # 삭제가 막힌 클론 폴더는 커밋에서 제외
+# 우편함(docs/우편함/)은 세션 간 우편이라 커밋하지 않는다 — 타임라인·git status 에 안 섞이게 제외(이미 있으면 다시 넣지 않는다)
+EXCL="$(git rev-parse --git-path info/exclude)"; mkdir -p "$(dirname "$EXCL")"
+grep -qxF -- "/docs/우편함/" "$EXCL" 2>/dev/null || echo "/docs/우편함/" >> "$EXCL"
 git add -A 2>/dev/null
 # 커밋 직전 검사 — 시크릿 파일이 staged 면 빼고 경고한다
 if leaked="$(git diff --cached --name-only | grep -E '(^|/)\.env(\.[^/]*)?$|\.(key|pem)$|credentials[^/]*\.json$' | grep -v '\.env\.example$')" && [ -n "$leaked" ]; then
@@ -153,11 +162,13 @@ cat <<REPORT
 ${CLASH_NOTE}④ 시간(지금 ${NOW}): ${BASELINE}
 다음(에이전트) — 세팅 뒤 할 일의 정본은 이 지시 하나다:
 1. 너는 오케다. AGENTS.md · harness/roles/오케.md · harness/guides/지도.md 를 읽는다.
-2. \`echo "오케 \${CODEX_THREAD_ID:-미확인} 탭 보고→사용자" >> docs/세션.txt\` — 「미확인」으로 찍혔으면 사용자에게 「/status 에 보이는 thread id 를 붙여 주세요」 한 줄만 묻고 그 값으로 줄을 고친다.
+2. \`echo "오케 \${CODEX_THREAD_ID:-미확인} 탭 보고→사용자" >> docs/세션.txt\` — 「미확인」으로 찍혔으면 사용자에게 「/status 에 보이는 thread id(앱이면 chat ID)를 붙여 주세요」 한 줄만 묻고 그 값으로 줄을 고친다(이 값이 아래 실측 ② 다).
 ${DATA_NOTE}3. 위 보고 ①~④ 를 그대로 사용자에게 전하고, 아래 줄만 덧붙인다:
-   - 「\`\$\` 를 쳐서 handoff 가 목록에 보이면 그대로, 안 보이면 /quit → codex resume」
-   - 「설명 탭: 새 탭 → codex → /permissions Full Access → /model → 「harness/roles/설명.md 읽고 역할 파악해. 이 세션은 설명 세션으로 쓸 거야」 → 탭 이름 설명」
+   - 「\`\$\` 를 쳐서 handoff 가 목록에 보이면 그대로, 안 보이면 /quit → codex resume(앱 chat 이면: 연 폴더가 작업 공간 루트인지 보고 새 chat)」
+   - 「설명 탭: 새 탭 → codex → /permissions Full Access → /model → 「harness/roles/설명.md 읽고 역할 파악해. 이 세션은 설명 세션으로 쓸 거야」 → 탭 이름 설명」(방식 A 의 「새 탭」은 앱 내장 터미널(Ctrl+\`)의 새 터미널 → codex. 방식 B 면: 새 chat(Ctrl+N) → Codex 모드·Local 확인 → 입력창 아래 권한 컨트롤 Full access(없으면 Ask for approval) → /model → 같은 문장 → Ctrl+Alt+R 로 이름 설명)
    - (이름 충돌 줄이 있을 때만) 「이 파일은 과제 원본이라 덮지 않았습니다 — 어떻게 할까요?」 한 줄을 묻고 답을 받을 때까지 그 파일에 쓰지 않는다
+   - 작업 방식 실측 — 「이 시험의 Codex 는 앱일 수 있어 CLI 전제가 맞는지 세팅 직후 확인합니다(방법은 루트 Codex-앱-조작.md 2절). ① 앱 터미널(Ctrl+\`)에서 \`which codex && codex --version\` 을 쳐서 결과를 알려 주세요 ② 에이전트가 \`echo "\${CODEX_THREAD_ID:-없음}"\` 실행(위 2번 값) ③ ①이 되면 설명 세션을 연 뒤 \`codex queue --thread <그 ID> --message "ping"\` 을 보낼 테니 그 세션 화면에 ping 이 뜨는지 봐 주세요 ④ 컨텍스트 % 가 입력창 근처에 늘 보이는지(안 보이면 /status). ①②③ 다 되면 A(터미널 CLI), 하나라도 안 되면 B(앱 chat) — 판정 전에는 B(우편함)로 갑니다」
+     에이전트는 ① 도 \`which codex && codex --version\` 으로 돌려 보되 사람 터미널 결과가 기준이다. ①②④ 결과를 \`docs/과제설정.md\` 7절 「작업 방식」에 적고, ③ 은 설명 세션이 세션.txt 에 올라온 뒤 시험해 판정(A/B)을 거기 쓴다. B 로 판정되면 이후 모든 queue 는 우편함(AGENTS.md 「세션 등록」)이고, 오케는 상대에게 보낼 때마다 사용자에게 「<역할> chat 에 \`우편함\` 이라고 쳐 주세요」 한 줄을 낸다.
    - \`다음 입력(오케): M0 종료 조건 충족(scaffold 커밋 · 스킬 목록) — 「과제 시작하자」를 치면 M1\`
 과제 원문은 아직 읽지 않고(「과제 시작하자」 때 읽는다) 다른 문서도 만들지 않는다. 스킬 목록(\`\$\`)이 resume 뒤에도 안 보이면 .agents/skills/<이름>/SKILL.md 를 직접 읽어 진행한다(전역 등록 \`install_skills.py\` 는 작업 공간 밖에 쓰므로 사용자가 시킬 때만).
 REPORT
