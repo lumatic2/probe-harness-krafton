@@ -1,6 +1,6 @@
 ---
 name: submit
-description: M6 제출 점검 — 실행 안내 증거 점검(evidence_check)·낡은 문서 청소·클린 재현·필수 파일명 대조·용량·저장 상태·금지 패턴. M6 에 오케가 서브에이전트로 1회 띄우거나 사용자가 독립 탭으로 연다. 결과는 docs/judge/점검-*.md 와 클린 재현 기록(docs/VERIFICATION.md).
+description: M6 제출 점검 — 실행 안내 증거 점검(evidence_check)·낡은 문서 청소·클린 재현·필수 파일명 대조·용량·저장 상태·금지 패턴. M6 에 오케가 제안하고 사용자가 승인하면 서브에이전트로 1회 띄우거나 사용자가 독립 탭으로 연다(아니면 오케가 같이 훑는다). 결과는 docs/judge/점검-*.md 와 클린 재현 기록(docs/VERIFICATION.md).
 ---
 
 # submit — 제출 점검 (M6)

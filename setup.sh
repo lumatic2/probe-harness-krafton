@@ -150,7 +150,7 @@ NOW="$(TZ=KST-9 date +%H:%M)"
 ENV_LINE="$(python3 --version 2>/dev/null || python --version 2>/dev/null || echo 'python 없음') · node $(node --version 2>/dev/null || echo 없음) · $(codex --version 2>/dev/null || echo 'codex ?') · 인터넷 $(grep -o 'pypi [0-9]*' docs/RECON.txt | head -1 || echo '?')"
 
 DATA_NOTE=""
-if [ -n "$DATA_DIRS" ] || { [ -n "$RERUN" ] && grep -q '데이터 파일' docs/과제설정.md; }; then DATA_NOTE="2b. 데이터 파일이 있다 — 데이터 서브에이전트를 띄운다(프롬프트 = harness/roles/데이터.md + docs/과제설정.md 1절의 데이터 폴더, wait_agent 없이 — 세팅 보고는 이 결과를 기다리지 않는다). 결과 docs/research/데이터.md 는 과제설정·DM·코어가 쓴다.
+if [ -n "$DATA_DIRS" ] || { [ -n "$RERUN" ] && grep -q '데이터 파일' docs/과제설정.md; }; then DATA_NOTE="2b. 데이터 파일이 있다 — 데이터를 서브에이전트로 훑게 할 수 있다. 오케가 「무엇을(구조 한 장 · 프로파일 · 이상) · 왜 · 얼마나(예상 소요)」 한 줄을 세팅 보고에 덧붙여 사용자에게 제안하고, 승인하면 그때 띄운다(프롬프트 = harness/roles/데이터.md + docs/과제설정.md 1절의 데이터 폴더, wait_agent 없이 — 세팅 보고는 이 결과를 기다리지 않는다). 승인 전에는 띄우지 않는다 — 안 돌리기로 하면 「과제 시작하자」 때 오케가 데이터 설명 파일부터 읽고 훑는 방법을 사용자와 정한다. 결과 docs/research/데이터.md 는 과제설정·DM·코어가 쓴다.
 "; fi
 
 cat <<REPORT

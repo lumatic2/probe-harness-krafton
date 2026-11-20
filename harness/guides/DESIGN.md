@@ -1,7 +1,7 @@
 # DESIGN.md — 결정 화면 디자인 규약
 
 > UI 코드를 쓰기 전에 읽는다. 산출물은 마케팅 페이지가 아니라 **현업 엔지니어가 매일 여는 내부 운영 도구**다. 목표는 "예쁘다"가 아니라 **30초 안에 오늘 뭘 할지 보인다**.
-> **화면 출발점**: 기본 = `bash harness/starter/shadcn/make.sh src/ui` 로 M1 실무자 대화가 도는 동안 스캐폴드 서브에이전트가 세워 두는 shadcn 앱(폴더는 항상 `src/ui/`)(페이지 6개 + 도메인 설정으로 켜는 8개(일정 격자 `#/schedule` · 문서 검토 `#/review` · AI 기능 `#/assist` · CSV 가져오기 `#/import` · 기준값 `#/settings` · 데이터셋 `#/datasets` · 실행 `#/run` · 노드 그래프 `#/graph`) + 로그인·내 정보 · 위젯 19종(W17 = AI 대화창 · W18 = 녹음·전사 · W19 = 노드 그래프, React Flow) · 기본 부품 19종(U1~U19) · 결정 부품 5종(D1~D5) · 보기 부품 7종(V1~V7) · 검토 부품 8종(R1~R8) · 중립 테마 · 한국어, 약 1분). npm 이 막히면 화면 없이 API·CSV 출력으로 가고 `$decision` 한 줄. 출발점은 사용자만 바꾼다(`AGENTS.md` 판단 원칙 8).
+> **화면 출발점**: 기본 = `bash harness/starter/shadcn/make.sh src/ui` 로 M1 실무자 대화가 도는 동안(오케가 제안해 사용자가 좋다고 하면) 세워 두는 shadcn 앱(폴더는 항상 `src/ui/`)(페이지 6개 + 도메인 설정으로 켜는 8개(일정 격자 `#/schedule` · 문서 검토 `#/review` · AI 기능 `#/assist` · CSV 가져오기 `#/import` · 기준값 `#/settings` · 데이터셋 `#/datasets` · 실행 `#/run` · 노드 그래프 `#/graph`) + 로그인·내 정보 · 위젯 19종(W17 = AI 대화창 · W18 = 녹음·전사 · W19 = 노드 그래프, React Flow) · 기본 부품 19종(U1~U19) · 결정 부품 5종(D1~D5) · 보기 부품 7종(V1~V7) · 검토 부품 8종(R1~R8) · 중립 테마 · 한국어, 약 1분). npm 이 막히면 화면 없이 API·CSV 출력으로 가고 `$decision` 한 줄. 출발점은 사용자만 바꾼다(`AGENTS.md` 판단 원칙 8).
 > **새 과제 데이터로 바꾸기**: 열·상태·지표·안내문은 `harness/starter/domains/<이름>/domain.json` 한 곳에서 정하고 화면 코드는 그대로 둔다 — 순서는 `harness/starter/DOMAIN.md`. 화면 커버리지·실전 결과 연결·로딩/오류 상태는 `harness/starter/shadcn/INTEGRATION.md`.
 > shadcn 앱의 테마 정본은 생성기가 넣는 `theme.css`(`harness/starter/shadcn/theme.css`, 중립 테마) 하나다 — 다른 토큰표를 섞지 않는다(빠른 시작 8). 토큰 값은 과제에 맞게 바꿔도 되지만 규칙(§원칙·§금지)은 유지한다.
 
