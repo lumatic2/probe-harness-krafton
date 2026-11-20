@@ -63,7 +63,7 @@ test('전송 키: Enter 만 전송 — Shift+Enter 는 줄바꿈, 한글 조합 
 });
 
 test('대화 보관: 도메인별 키, 읽을 때 걸러내고, 추가는 최신 저장본에 이어 붙이고 40개까지, 지우기', () => {
-  assert.equal(storageKey('interview'), 'sk-chat-interview');
+  assert.equal(storageKey('interview'), 'app-chat-interview');
   assert.deepEqual(readMessages(null), []);
   assert.deepEqual(readMessages('깨진 json'), []);
   assert.deepEqual(readMessages('{"a":1}'), []);

@@ -56,7 +56,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const dump = (name, arr, wrap) => fs.writeFileSync(path.join(here, name), wrap ? `{\n"rows": [\n${arr.map((r) => JSON.stringify(r)).join(',\n')}\n]\n}\n` : `[\n${arr.map((r) => JSON.stringify(r)).join(',\n')}\n]\n`);
 dump('sample.json', out, true);
 const bn = out.filter((r) => r.status === '병목').slice(-3).reverse();
-dump('decisions.json', bn.map((r, i) => ({ id: `D-${pad(i + 1, 4)}`, ref: r.tr_id, decision: i === 1 ? '관찰' : '경로 조정 검토', reason: i === 1 ? '일시적 정체로 보여 하루 더 관찰' : `${r.route} 대기 ${r.wait}분, 같은 구간 반복`, who: '물류설비팀', ts: `2026-10-28T08:${pad(40 - i * 4)}:00` })), false);
+dump('decisions.json', bn.map((r, i) => ({ id: `D-${pad(i + 1, 4)}`, ref: r.tr_id, decision: i === 1 ? '관찰' : '경로 조정 검토', reason: i === 1 ? '일시적 정체로 보여 하루 더 관찰' : `${r.route} 대기 ${r.wait}분, 같은 구간 반복`, who: '물류운영팀', ts: `2026-10-28T08:${pad(40 - i * 4)}:00` })), false);
 const by = {};
 for (const r of out) if (r.status !== '점검 제외') { by[r.route] = by[r.route] || [0, 0]; by[r.route][0] += r.wait; by[r.route][1]++; }
 const top = Object.entries(by).filter(([, v]) => v[1] >= 5).map(([k, v]) => [k, r1(v[0] / v[1]), v[1]]).sort((a, b) => b[1] - a[1]).slice(0, 5);

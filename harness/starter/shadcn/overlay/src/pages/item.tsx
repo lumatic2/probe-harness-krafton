@@ -66,7 +66,7 @@ export default function Item() {
               <TableHeader><TableRow><TableHead>시각</TableHead><TableHead>담당</TableHead>{fields.map((f) => <TableHead key={f.key} className={f.type === 'number' ? 'text-right' : ''}>{f.label.replace(/\s*\(.*\)$/, '')}</TableHead>)}</TableRow></TableHeader>
               <TableBody>
                 {[...hist].reverse().map((x) => (
-                  <TableRow key={x.id} className={fresh.has(x.id) ? 'sk-flash' : ''}>
+                  <TableRow key={x.id} className={fresh.has(x.id) ? 'app-flash' : ''}>
                     <TableCell className="whitespace-nowrap tabular-nums">{shortTs(x.ts)}</TableCell><TableCell className="whitespace-nowrap">{x.who}</TableCell>
                     {fields.map((f) => <TableCell key={f.key} className={f.type === 'number' ? 'text-right tabular-nums' : f.type === 'textarea' ? 'min-w-40 whitespace-normal break-words' : ''}>{x[f.key]}</TableCell>)}
                   </TableRow>

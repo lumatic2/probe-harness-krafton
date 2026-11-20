@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     beginTransition('login') // 전환 화면을 덮은 채 새로 읽는다(최소 1초) — App 이 준비되면 걷힌다
     setSessionToken(j.token as string | undefined) // 쿠키가 안 돌아오는 환경에서도 새로고침 뒤 세션이 이어진다
     setUser(j.user as AuthUser)
-    try { sessionStorage.setItem('sk-auth-toast', `login:${(j.user as AuthUser).name}`) } catch { /* 저장소가 막힌 틀 — 알림만 생략 */ }
+    try { sessionStorage.setItem('app-auth-toast', `login:${(j.user as AuthUser).name}`) } catch { /* 저장소가 막힌 틀 — 알림만 생략 */ }
     const home = HOME_BY_ROLE[(j.user as AuthUser).role]
     if (home) location.replace(`#/${home}`) // 역할별 첫 화면 — 새로고침 전에 해시만 바꾼다
     location.reload() // 로그인 전에 401 로 끝난 데이터 요청(decisions·settings)을 세션으로 다시 받는다 — 성공 toast 는 새로고침 뒤 App 이 띄운다
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await fetch('/api/auth-logout', { method: 'POST' }).catch(() => {})
     setSessionToken(null)
     setUser(null)
-    try { sessionStorage.setItem('sk-auth-toast', 'logout') } catch { /* 위와 같음 */ }
+    try { sessionStorage.setItem('app-auth-toast', 'logout') } catch { /* 위와 같음 */ }
     location.replace('#/dashboard'); location.reload()
   }, [])
 

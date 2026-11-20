@@ -17,9 +17,9 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 // ───────── 움직임 도우미 — 한도는 theme.css 「움직임」(접힘 150ms · 새 행 강조 1회).
 // Reveal: 내용을 150ms 로 펼치고 접는다. 접힌 동안에도 DOM 에 남으므로 inert 로 포커스·읽기를 막는다.
 export function Reveal({ open, children }: { open: boolean; children: ReactNode }) {
-  return <div className="sk-reveal" data-open={open} inert={!open}><div>{children}</div></div>
+  return <div className="app-reveal" data-open={open} inert={!open}><div>{children}</div></div>
 }
-// useFreshIds: 처음 그린 뒤에 새로 생긴 id 만 돌려준다 — 방금 저장된 행에 className="sk-flash" 를 붙일 때 쓴다(1.3초 뒤에는 새것이 아니다).
+// useFreshIds: 처음 그린 뒤에 새로 생긴 id 만 돌려준다 — 방금 저장된 행에 className="app-flash" 를 붙일 때 쓴다(1.3초 뒤에는 새것이 아니다).
 export function useFreshIds(ids: string[]): Set<string> {
   const seen = useRef<Set<string> | null>(null)
   if (seen.current === null) seen.current = new Set(ids)
@@ -242,7 +242,7 @@ export function Banner({ title, children, tone = 'info', action, dismissible = t
   const close = () => { setLeaving(true); setTimeout(() => setClosed(true), 160) } // 접히는 150ms 뒤에 치운다
   return (
     <Reveal open={!leaving}>
-    <Alert className={`flex items-start justify-between gap-3 ${tone === 'warn' ? 'sk-urgent' : ''}`}>
+    <Alert className={`flex items-start justify-between gap-3 ${tone === 'warn' ? 'app-urgent' : ''}`}>
       <div>
         <AlertTitle>{tone === 'warn' ? '주의 · ' : ''}{title}</AlertTitle>
         {children ? <AlertDescription className={tone === 'warn' ? 'text-inherit' : ''}>{children}</AlertDescription> : null}

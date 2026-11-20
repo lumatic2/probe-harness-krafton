@@ -16,7 +16,7 @@ import {
 import { baseSample, ctx, domainName, imported, prevImported } from '@/lib/derive'
 import { Empty, WidgetCard } from '@/widgets/panel'
 
-const FLASH = 'sk-import-flash'
+const FLASH = 'app-import-flash'
 const MAX_ERRORS = 50
 const pad = (n: number) => String(n).padStart(2, '0')
 const nowTs = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}` }

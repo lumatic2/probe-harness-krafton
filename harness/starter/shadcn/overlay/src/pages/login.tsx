@@ -21,8 +21,8 @@ export default function Login() {
   // 로그아웃 뒤 새로고침으로 왔으면 한 번 알린다(auth.tsx 가 표식을 남긴다)
   useEffect(() => {
     let flag: string | null = null
-    try { flag = sessionStorage.getItem('sk-auth-toast') } catch { /* 저장소가 막힌 틀 */ }
-    if (flag === 'logout') { try { sessionStorage.removeItem('sk-auth-toast') } catch { /* 위와 같음 */ } toast('로그아웃했습니다') }
+    try { flag = sessionStorage.getItem('app-auth-toast') } catch { /* 저장소가 막힌 틀 */ }
+    if (flag === 'logout') { try { sessionStorage.removeItem('app-auth-toast') } catch { /* 위와 같음 */ } toast('로그아웃했습니다') }
   }, [])
 
   async function submit(e: FormEvent) {

@@ -28,7 +28,7 @@
   {"key": "status", "label": "상태", "type": "enum", "badge": true, "filter": "select", "edit": true, "width": 96, "values": [{"v": "납기 초과", "tone": "urgent"}, {"v": "지연", "tone": "warn"}, {"v": "입고 대기", "tone": "plain"}, {"v": "정시", "tone": "muted", "done": true}]}
  ],
  "roles": {"id": "po_id", "title": "{item} {po_id}", "status": "status", "priority": null, "date": "promised", "owner": "cat", "group": "cat", "unit": "item", "deadline": null},
- "group": {"col": "cat", "label": "품목군", "suffix": "", "values": ["핵심 부품", "코팅 소재", "공정 가스", "세정 약품", "소모성 부품"]},
+ "group": {"col": "cat", "label": "품목군", "suffix": "", "values": ["핵심 장비", "사무 가구", "용지·인쇄물", "청소·위생 용품", "소모성 비품"]},
  "metrics": [
   {"key": "lateRate", "label": "지연율", "agg": "rate", "where": {"status": ["지연", "납기 초과"]}, "unit": "%", "decimals": 1, "better": "down", "target": "$param:late_target"},
   {"key": "late", "label": "지연 발주", "agg": "count", "where": {"status": ["지연", "납기 초과"]}, "unit": "건", "better": null},

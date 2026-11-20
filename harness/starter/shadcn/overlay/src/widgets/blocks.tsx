@@ -222,7 +222,7 @@ export function FloorMap({ w }: { w: W }) {
             <a key={k} href={c.href} className={`flex flex-col gap-1 rounded-lg border bg-card p-2.5 text-sm shadow-xs hover:bg-muted/50 ${c.dim ? 'opacity-40' : ''}`}>
               <div className="flex items-center justify-between gap-1">
                 <span className="font-medium">{c.id}</span>
-                <Badge variant={si === 1 ? 'secondary' : 'outline'} className={si === 2 ? 'sk-urgent' : ''}>{c.state}</Badge>
+                <Badge variant={si === 1 ? 'secondary' : 'outline'} className={si === 2 ? 'app-urgent' : ''}>{c.state}</Badge>
               </div>
               <span className="text-xs text-muted-foreground">{c.note}</span>
             </a>

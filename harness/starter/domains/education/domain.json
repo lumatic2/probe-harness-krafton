@@ -18,7 +18,7 @@
   {"key": "hired", "label": "입사일", "type": "date", "width": 104}
  ],
  "roles": {"id": "rec_id", "title": "{name} · {course}", "status": "status", "priority": null, "date": "assigned", "owner": null, "group": "job", "unit": "job", "deadline": "valid_until"},
- "group": {"col": "job", "label": "직무", "suffix": "", "values": ["공정엔지니어", "설비엔지니어", "품질", "생산기술", "안전환경", "구매"]},
+ "group": {"col": "job", "label": "직무", "suffix": "", "values": ["기획", "영업", "개발", "고객지원", "인사·총무", "구매"]},
  "metrics": [
   {"key": "doneRate", "label": "이수율", "agg": "rate", "where": {"status": ["이수"]}, "unit": "%", "decimals": 1, "better": "up", "target": 80},
   {"key": "count", "label": "배정 건수", "agg": "count", "unit": "건", "better": null},

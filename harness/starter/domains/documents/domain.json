@@ -18,7 +18,7 @@
   {"key": "due", "label": "검토 기한", "type": "date", "edit": true, "width": 104}
  ],
  "roles": {"id": "doc_id", "title": "{title}", "status": "status", "priority": null, "date": "received", "owner": "applicant", "group": "applicant", "unit": "applicant", "deadline": "due"},
- "group": {"col": "applicant", "label": "출원인", "suffix": "", "values": ["한빛전자", "에이원테크", "다온소재", "미래장비", "세진시스템"]},
+ "group": {"col": "applicant", "label": "출원인", "suffix": "", "values": ["한빛전자", "에이원테크", "다온솔루션", "미래시스템", "세진시스템"]},
  "metrics": [
   {"key": "doneRate", "label": "분류 확정률", "agg": "rate", "where": {"status": ["확정"]}, "unit": "%", "decimals": 1, "better": "up", "target": 70},
   {"key": "count", "label": "접수 문서", "agg": "count", "unit": "건", "better": null},
@@ -53,7 +53,7 @@
  "evidence": ["{doc_id} · {title}", "출원인 {applicant} · 분류 {tags} · 신뢰도 {confidence}%", "상태 {status} · 검토 기한 {due} {_dday} · 같은 출원인 최근 14일 {_related}건"],
  "newRow": {"status": "미검토", "received": "{_today}"},
  "review": {"title": "문서 분류 검토", "listCols": ["doc_id", "title"], "bodyCol": "abstract", "tagsCol": "tags", "confCol": "confidence", "statusCol": "status", "doneValue": "확정", "uncertainBelow": 70, "metaCols": ["applicant", "filed", "received", "due"],
-  "taxonomy": ["메모리 소자", "패키징", "공정 제어", "설비 모니터링", "검사·계측", "소재·화학", "회로 설계", "AI·알고리즘"],
+  "taxonomy": ["데이터 저장", "사용자 인터페이스", "업무 자동화", "시스템 모니터링", "품질 검사", "결제·정산", "네트워크 통신", "AI·알고리즘"],
   "reasonLabel": "판정 사유", "emptyReason": "판정 사유를 입력하세요.", "saveLabel": "분류 확정", "who": "지식재산 담당"},
  "control": {"title": "일별 접수 문서 관리도", "metric": "count", "k": 1.5, "days": 14},
  "dist": {"title": "분류 신뢰도 분포", "value": {"col": "confidence"}, "unit": "%", "label": "신뢰도", "groupBy": "applicant"},

@@ -214,5 +214,5 @@ test('Authorization: Bearer 토큰은 쿠키 자리로 합쳐져 auth 에 넘어
   await call(api, 'GET', '/api/auth-me', { cookie: 'x=1', authorization: 'Bearer tok-12345678' });
   await call(api, 'GET', '/api/auth-me', { cookie: 'x=1', authorization: 'Basic abc' });
   const seen = s.opts.auth.calls.filter((c) => c[0] === 'me').map((c) => c[1]);
-  assert.deepEqual(seen, ['sk_session=tok-12345678', 'x=1; sk_session=tok-12345678', 'x=1']);
+  assert.deepEqual(seen, ['app_session=tok-12345678', 'x=1; app_session=tok-12345678', 'x=1']);
 });

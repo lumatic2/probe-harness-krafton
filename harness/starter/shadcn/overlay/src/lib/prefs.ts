@@ -4,7 +4,7 @@ import { DEFAULT_STATE } from '@/domain/core.mjs'
 
 export type Prefs = { font: 'small' | 'normal' | 'large'; density: 'normal' | 'compact'; period: string; home: string }
 export const DEFAULT_PREFS: Prefs = { font: 'normal', density: 'normal', period: '7d', home: 'dashboard' }
-const KEY = 'sk-prefs'
+const KEY = 'app-prefs'
 
 export function loadPrefs(): Prefs {
   try { return { ...DEFAULT_PREFS, ...(JSON.parse(localStorage.getItem(KEY) || '{}') as Partial<Prefs>) } } catch { return { ...DEFAULT_PREFS } }

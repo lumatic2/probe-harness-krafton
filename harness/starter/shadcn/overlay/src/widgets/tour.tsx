@@ -10,7 +10,7 @@ import { navigate } from '@/lib/app-context'
 export type TourStep = { target: string; title: string; text: string; page?: string }
 type Box = { x: number; y: number; w: number; h: number }
 
-const START = 'sk-tour-start'
+const START = 'app-tour-start'
 export const startTour = () => window.dispatchEvent(new Event(START))
 const PAD = 6, CARD_W = 360, GAP = 12
 
@@ -115,14 +115,14 @@ export function Tour({ steps, seenKey, auto = true }: { steps: TourStep[]; seenK
       <div className="absolute inset-0" onClick={(e) => e.stopPropagation()} />
       {/* 밝은 칸은 언제나 이 한 요소다(없다가 생기지 않는다). 자리를 아직 못 찾았으면 화면 가운데의 크기 0 인 점이라 그림자가 화면 전체를 고르게 덮는다. */}
       <div aria-hidden className="pointer-events-none absolute rounded-lg transition-all duration-200 ease-out" style={hole ? { left: hole.x, top: hole.y, width: hole.w, height: hole.h, boxShadow: '0 0 0 9999px rgba(0,0,0,0.6)' } : { left: vw / 2, top: vh / 2, width: 0, height: 0, boxShadow: '0 0 0 9999px rgba(0,0,0,0.6)' }} data-tour-hole />
-      <div role="dialog" aria-modal="true" aria-labelledby="sk-tour-title" aria-describedby="sk-tour-text" className="absolute flex flex-col gap-3 rounded-lg border bg-popover p-4 text-popover-foreground shadow-lg transition-[left,top] duration-150 ease-out" style={{ left, top, width: CARD_W }} data-tour-card>
+      <div role="dialog" aria-modal="true" aria-labelledby="app-tour-title" aria-describedby="app-tour-text" className="absolute flex flex-col gap-3 rounded-lg border bg-popover p-4 text-popover-foreground shadow-lg transition-[left,top] duration-150 ease-out" style={{ left, top, width: CARD_W }} data-tour-card>
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs tabular-nums text-muted-foreground">{index + 1} / {steps.length}</span>
           <button type="button" className="rounded-sm text-xs text-muted-foreground underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring" onClick={finish} data-tour-skip>건너뛰기</button>
         </div>
         <div>
-          <h2 id="sk-tour-title" className="text-base font-semibold">{step.title}</h2>
-          <p id="sk-tour-text" className="mt-1 text-sm text-muted-foreground">{step.text}</p>
+          <h2 id="app-tour-title" className="text-base font-semibold">{step.title}</h2>
+          <p id="app-tour-text" className="mt-1 text-sm text-muted-foreground">{step.text}</p>
         </div>
         <div className="flex justify-end gap-2">
           {index > 0 ? <Button variant="outline" className="h-10 min-w-20 px-5 text-sm" onClick={() => go(index - 1)} data-tour-prev>이전</Button> : null}

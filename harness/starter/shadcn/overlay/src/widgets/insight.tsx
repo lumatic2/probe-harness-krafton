@@ -1,6 +1,6 @@
 // insight.tsx — 보기 부품 V1~V7. 「숫자를 보고 그 자리에서 근거를 확인한다」를 돕는 묶음. 전부 props 로 받은 것만 그린다(도메인 설정을 읽지 않는다).
 // V1 지표 전환 추세(지표를 누르면 차트가 그 지표로) · V2 카드 안 탭 · V3 크게 보기 · V4 차트↔표 전환 · V5 차트 위 사건 표시(V1 의 events) · V6 갱신 시각 + 새로고침 · V7 임계값 지표.
-// 차트는 번들 Recharts, 색은 토큰만(강조 하나 --chart-1). 차트 자체의 움직임은 끈다(isAnimationActive=false). 지표를 바꾸면 차트가 150ms 로 나타나고(sk-fade), 임계값 배지는 색이 150ms 로 바뀐다.
+// 차트는 번들 Recharts, 색은 토큰만(강조 하나 --chart-1). 차트 자체의 움직임은 끈다(isAnimationActive=false). 지표를 바꾸면 차트가 150ms 로 나타나고(app-fade), 임계값 배지는 색이 150ms 로 바뀐다.
 import { useEffect, useId, useState, type ReactNode } from 'react'
 import { Maximize2Icon, RefreshCwIcon } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts'
@@ -44,7 +44,7 @@ export function MetricTrend({ metrics, events = [], height = 240, value, onChang
         ))}
       </div>
       {ys.length ? (
-        <ChartContainer key={m.key} config={config} className="sk-fade aspect-auto w-full" style={{ height }}>
+        <ChartContainer key={m.key} config={config} className="app-fade aspect-auto w-full" style={{ height }}>
           <AreaChart data={m.points} margin={{ left: 0, right: 12, top: 16 }}>
             <defs>
               <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
@@ -67,7 +67,7 @@ export function MetricTrend({ metrics, events = [], height = 240, value, onChang
   )
 }
 
-// ───────── V2 카드 안 탭 — 같은 대상을 다른 기준으로 나눈 목록 여러 개(설비별·공정별·코드별)를 카드 하나에. 탭 이름이 곧 「무엇으로 나눴는가」.
+// ───────── V2 카드 안 탭 — 같은 대상을 다른 기준으로 나눈 목록 여러 개(부서별·유형별·코드별)를 카드 하나에. 탭 이름이 곧 「무엇으로 나눴는가」.
 export type CardTab = { key: string; label: string; content: ReactNode }
 export function TabbedCard({ title, sub, tabs, action }: { title: string; sub?: string; tabs: CardTab[]; action?: ReactNode }) {
   return (
@@ -154,7 +154,7 @@ export function RefreshBar({ updatedAt, onRefresh, intervalSec, label = '마지�
 }
 
 // ───────── V7 임계값 지표 — 값이 기준을 넘으면 상태(정상·주의·긴급)가 글자와 배지로 바뀐다. 기준은 props 로 받는다(설정 화면의 기준값과 같은 숫자를 넘긴다).
-// direction: 'high' = 클수록 나쁨(불량 수·대기 시간) · 'low' = 작을수록 나쁨(가동률·수율).
+// direction: 'high' = 클수록 나쁨(불량 수·대기 시간) · 'low' = 작을수록 나쁨(가동률·달성률).
 export type Thresholds = { warn: number; urgent: number; direction: 'high' | 'low' }
 export type ThresholdState = 'ok' | 'warn' | 'urgent'
 export function thresholdState(value: number, t: Thresholds): ThresholdState {
@@ -170,7 +170,7 @@ export function ThresholdStat({ label, value, unit, decimals = 0, thresholds, no
       <CardHeader>
         <CardDescription>{label}</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums">{num(value, decimals)}<span className="ml-0.5 text-base font-medium text-muted-foreground">{unit}</span></CardTitle>
-        <CardAction><Badge variant={state === 'warn' ? 'secondary' : 'outline'} className={`transition-colors duration-150 ${state === 'urgent' ? 'sk-urgent' : state === 'ok' ? 'text-muted-foreground' : ''}`}>{STATE_LABEL[state]}</Badge></CardAction>
+        <CardAction><Badge variant={state === 'warn' ? 'secondary' : 'outline'} className={`transition-colors duration-150 ${state === 'urgent' ? 'app-urgent' : state === 'ok' ? 'text-muted-foreground' : ''}`}>{STATE_LABEL[state]}</Badge></CardAction>
       </CardHeader>
       <CardContent className="text-xs text-muted-foreground">
         기준: 주의 {num(thresholds.warn, decimals)}{unit} {sign} · 긴급 {num(thresholds.urgent, decimals)}{unit} {sign}{note ? ` · ${note}` : ''}

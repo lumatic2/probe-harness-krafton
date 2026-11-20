@@ -1,9 +1,9 @@
 // transition.ts — 로그인·로그아웃 전환 화면. 로그인·로그아웃은 데이터를 세션에 맞게 다시 받으려고 페이지를 새로 읽는다 — 그 사이에 화면이 깜박이지 않게, 누른 순간부터 최소 1초 동안 같은 전환 화면을 덮어 둔다.
 // 흐름: auth.tsx 가 beginTransition(kind) → 새로고침 → main.tsx 가 맨 처음 resumeTransition() 으로 같은 화면을 다시 덮음 → App 이 그릴 준비가 되면 endTransition() → 누른 지 1초가 지났을 때 걷는다.
 // React 밖의 DOM 한 장이다(새로고침 앞뒤와 App 이 뜨기 전에도 보여야 해서). 저장소가 막힌 틀에서는 표식을 못 남기므로 새로고침 뒤에는 이어지지 않고 그냥 넘어간다.
-const KEY = 'sk-transition'
+const KEY = 'app-transition'
 const MIN_MS = 1000
-const ID = 'sk-transition'
+const ID = 'app-transition'
 type Kind = 'login' | 'logout'
 const TEXT: Record<Kind, { title: string; sub: string }> = {
   login: { title: '로그인하는 중입니다', sub: '계정에 맞는 화면을 준비하고 있습니다.' },
@@ -18,11 +18,11 @@ function mount(kind: Kind, startedAt: number) {
   el.setAttribute('aria-live', 'polite')
   el.dataset.kind = kind
   el.dataset.startedAt = String(startedAt)
-  el.className = 'sk-transition'
+  el.className = 'app-transition'
   const left = Math.max(0, MIN_MS - (Date.now() - startedAt))
-  el.innerHTML = `<div class="sk-transition-box"><p class="sk-transition-title"></p><p class="sk-transition-sub"></p><div class="sk-transition-bar"><span style="animation-duration:${MIN_MS}ms;animation-delay:-${MIN_MS - left}ms"></span></div></div>`
-  el.querySelector('.sk-transition-title')!.textContent = TEXT[kind].title
-  el.querySelector('.sk-transition-sub')!.textContent = TEXT[kind].sub
+  el.innerHTML = `<div class="app-transition-box"><p class="app-transition-title"></p><p class="app-transition-sub"></p><div class="app-transition-bar"><span style="animation-duration:${MIN_MS}ms;animation-delay:-${MIN_MS - left}ms"></span></div></div>`
+  el.querySelector('.app-transition-title')!.textContent = TEXT[kind].title
+  el.querySelector('.app-transition-sub')!.textContent = TEXT[kind].sub
   document.body.appendChild(el)
 }
 

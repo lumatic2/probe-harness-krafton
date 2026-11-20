@@ -52,7 +52,7 @@ export function chatContext(ctx, state) {
 // 입력칸 keydown 이벤트 → 전송이면 true. 한글 조합 중에는 Enter 가 글자 확정이므로 isComposing(또는 구형 keyCode 229)을 본다.
 export const isSendKey = (e) => e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229;
 
-export const storageKey = (name) => `sk-chat-${name}`;
+export const storageKey = (name) => `app-chat-${name}`;
 
 export function readMessages(raw) {
   let list;

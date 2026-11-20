@@ -4,13 +4,13 @@ import { API_NAME, buildHash, DEFAULT_STATE, linkTo, parseHash, type Decision, t
 
 const subscribe = (cb: () => void) => {
   window.addEventListener('hashchange', cb)
-  window.addEventListener('sk-nav', cb)
-  return () => { window.removeEventListener('hashchange', cb); window.removeEventListener('sk-nav', cb) }
+  window.addEventListener('app-nav', cb)
+  return () => { window.removeEventListener('hashchange', cb); window.removeEventListener('app-nav', cb) }
 }
 
 export function navigate(hash: string, replace = false) {
   if (location.hash === hash) return
-  if (replace) { history.replaceState(null, '', hash); window.dispatchEvent(new Event('sk-nav')) } else location.hash = hash
+  if (replace) { history.replaceState(null, '', hash); window.dispatchEvent(new Event('app-nav')) } else location.hash = hash
 }
 
 type Ctx = {

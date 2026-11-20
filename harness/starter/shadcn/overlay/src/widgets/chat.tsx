@@ -18,7 +18,7 @@ import { Empty } from '@/widgets/panel'
 const docFiles = import.meta.glob('../domain/*/docs/*.{md,txt}', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>
 const paragraphs = chatConfig(ctx.d)?.docs ? buildParagraphs(loadDomainDocs(docFiles, domainName)) : undefined
 const KEY = storageKey(domainName)
-const EVENT = 'sk-chat'
+const EVENT = 'app-chat'
 const subscribe = (cb: () => void) => { window.addEventListener(EVENT, cb); return () => window.removeEventListener(EVENT, cb) }
 const snapshot = () => sessionStorage.getItem(KEY) ?? ''
 const changed = () => window.dispatchEvent(new Event(EVENT))
@@ -120,8 +120,8 @@ export function AiMark({ className = 'size-5' }: { className?: string }) {
   return markUrl ? <img src={markUrl} alt="" className={className} /> : <SparklesIcon className={className} />
 }
 
-const OPEN_KEY = 'sk-chat-open'
-const OPEN_EVENT = 'sk-chat-open'
+const OPEN_KEY = 'app-chat-open'
+const OPEN_EVENT = 'app-chat-open'
 const readOpen = () => { try { return sessionStorage.getItem(OPEN_KEY) === '1' } catch { return false } }
 const subscribeOpen = (cb: () => void) => { window.addEventListener(OPEN_EVENT, cb); return () => window.removeEventListener(OPEN_EVENT, cb) }
 export function setChatOpen(open: boolean) {

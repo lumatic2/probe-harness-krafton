@@ -52,7 +52,7 @@ export function PeriodToggle() {
 // 색만으로 구분하지 않는다 — 글자가 항상 같이 나온다. tone: urgent = 옅은 주황 배지 · warn = 회색 바탕 · plain = 테두리 · muted = 회색 글자 · strong = 테두리 + 굵은 글자(한 행에서 주황은 상태 열 하나뿐일 때 다른 강조 값)
 export function ToneBadge({ text, tone }: { text: string; tone?: string }) {
   if (!text) return null
-  return <Badge variant={tone === 'warn' ? 'secondary' : 'outline'} className={tone === 'urgent' ? 'sk-urgent' : tone === 'muted' ? 'text-muted-foreground' : tone === 'strong' ? 'font-semibold' : ''}>{text}</Badge>
+  return <Badge variant={tone === 'warn' ? 'secondary' : 'outline'} className={tone === 'urgent' ? 'app-urgent' : tone === 'muted' ? 'text-muted-foreground' : tone === 'strong' ? 'font-semibold' : ''}>{text}</Badge>
 }
 
 export const Empty = ({ children = '표시할 데이터가 없습니다.' }: { children?: ReactNode }) => (

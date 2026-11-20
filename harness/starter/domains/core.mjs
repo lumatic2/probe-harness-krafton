@@ -28,7 +28,7 @@ export const mmdd = (d) => String(d).slice(5, 10);
 export const shortTs = (ts) => String(ts ?? '').replace('T', ' ').slice(5, 16);
 export const periodLabel = (v) => (PERIODS.find((p) => p.v === v) || PERIODS[1]).label;
 
-// ---------- 해시 라우팅: #/dashboard?period=7d&group=핵심 부품 · #/item/PO-0001 · 목록 필터는 f_<열>=값 ----------
+// ---------- 해시 라우팅: #/dashboard?period=7d&group=핵심 장비 · #/item/PO-0001 · 목록 필터는 f_<열>=값 ----------
 export function parseHash(hash) {
   const raw = String(hash || '').replace(/^#\/?/, '');
   const [pathPart, qs = ''] = raw.split('?');

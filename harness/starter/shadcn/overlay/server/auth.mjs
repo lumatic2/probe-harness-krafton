@@ -2,12 +2,12 @@
 // 켜기: 서버 환경변수(또는 앱 폴더 .env) AUTH_ON=1. 꺼져 있으면 모든 요청이 기본 역할(AUTH_DEFAULT_ROLE, 기본 operator)로 통과하고 화면도 로그인을 묻지 않는다.
 // 계정: AUTH_USERS="id:비밀번호:역할:표시이름;id2:…" — 비밀번호는 .env 에만(커밋 금지). 역할 이름은 자유(권장: user=보기 · operator=쓰기).
 // 쓰기(POST·PUT /api/*)는 AUTH_WRITE_ROLES(기본 "operator", 쉼표 구분)에 든 역할만 — 버튼 숨김과 별개로 서버가 막는다(읽기 성격의 POST 예외는 vite.config.ts READ_POSTS). auth-me·auth-login 응답의 canWrite 가 그 판정이라 화면은 역할 이름을 몰라도 된다.
-// 세션: 서버 메모리의 토큰(쿠키 sk_session, HttpOnly, 8시간). 응시 환경의 Browser 는 앱을 다른 사이트의 틀(iframe) 안에 띄워 SameSite=Lax 쿠키가 돌아오지 않을 수 있다(증상: 로그인 직후 다시 미로그인) — 그래서 로그인 응답에 token 도 주고, 화면은 그것을 Authorization: Bearer 로 같이 보낸다(api.mjs 가 쿠키 자리로 합친다, 화면 쪽은 src/lib/session-fetch.ts). 재시작하면 풀린다 — 과제가 세션 영속을 요구하면 data/store 로 옮긴다.
+// 세션: 서버 메모리의 토큰(쿠키 app_session, HttpOnly, 8시간). 응시 환경의 Browser 는 앱을 다른 사이트의 틀(iframe) 안에 띄워 SameSite=Lax 쿠키가 돌아오지 않을 수 있다(증상: 로그인 직후 다시 미로그인) — 그래서 로그인 응답에 token 도 주고, 화면은 그것을 Authorization: Bearer 로 같이 보낸다(api.mjs 가 쿠키 자리로 합친다, 화면 쪽은 src/lib/session-fetch.ts). 재시작하면 풀린다 — 과제가 세션 영속을 요구하면 data/store 로 옮긴다.
 // 빠른 로그인: AUTH_QUICK=1 이면 로그인 화면 아래에 계정별 「○○로 로그인」 버튼이 뜬다(QA·시연용 — 비밀번호 없이 그 계정으로 들어간다). 로그인 전 auth-me 응답의 quick 에 계정 목록(id·표시이름·역할, 비밀번호 없음)이 실리고, auth-login 이 {quick:id} 를 받는다. 꺼져 있으면(기본) 목록도 안 나가고 {quick} 요청은 403.
 // 응답·로그·오류 문구에 비밀번호·토큰을 넣지 않는다. 실패 5회면 그 id 는 60초 잠근다.
 import { randomUUID } from 'node:crypto';
 
-export const COOKIE = 'sk_session';
+export const COOKIE = 'app_session';
 export const TTL_MS = 8 * 60 * 60 * 1000;
 export const LOCK_AFTER = 5;
 export const LOCK_MS = 60 * 1000;

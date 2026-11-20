@@ -55,7 +55,7 @@
   - AI 에게 보내는 것은 지금 화면의 요약(`chatContext`)과 대화뿐이다. 근거 문서를 쓰려면 `chat.docs: true` + `src/domain/<도메인>/docs/*.md`.
 - **화면 틀은 「본문만 스크롤」이다**(`App.tsx`). 창 전체는 스크롤되지 않고, 「왼쪽 메뉴 | 머리줄 + (본문 | AI 패널)」로 높이를 화면에 맞춘 뒤 본문 칸(`[data-scroll]`)만 스크롤한다. 그래서 머리줄·왼쪽 메뉴·AI 패널은 늘 제자리에 있고, 스크롤바는 본문과 AI 패널 사이에 생긴다. 새 화면은 이 본문 칸 안에 그려진다. 화면 코드에서 `window.scrollTo`·`window.scrollY` 를 쓰지 않는다(창은 안 움직인다). 본문을 움직이려면 `document.querySelector('[data-scroll]')`, 특정 요소로 가려면 `el.scrollIntoView()`. 인쇄 때는 `print.css` 가 높이 잠금을 풀어 전체가 찍힌다.
 - **화면이 흔들리지 않게 걸어 둔 것**(지우지 않는다):
-  - 스크롤바 자리 고정: 본문 칸에 `scrollbar-gutter: stable`(`theme.css` `.sk-scroll`). 내용 길이에 따라 본문이 옆으로 밀리지 않는다.
+  - 스크롤바 자리 고정: 본문 칸에 `scrollbar-gutter: stable`(`theme.css` `.app-scroll`). 내용 길이에 따라 본문이 옆으로 밀리지 않는다.
   - 스크롤 잠금 여백 되돌리기: 메뉴·선택·모달·시트가 열릴 때 Radix 가 body 에 주는 오른쪽 여백을 0 으로(`body[data-scroll-locked]`).
   - **표의 열 폭 고정**: 목록 표는 열 폭을 데이터 전체로 한 번 정해 비율로 고정한다(`lib/table-widths.ts` 의 `columnWidths`). 쪽·탭·정렬·검색으로 보이는 행이 바뀌어도 열이 움직이지 않는다. **쪽 넘김·거르기·정렬이 있는 표를 새로 만들면 같은 방법을 쓴다**: `const w = columnWidths(cols, 전체 행)` → `<Table className="table-fixed" style={{ minWidth: w.minWidth }}>` + `<TableHead style={{ width: w.percent[key] }}>`. 열이 몇 개로 정해진 작은 표는 머리칸에 폭 클래스(`w-28` 등)를 주고 `table-fixed`.
   - 조건에 따라 나타나는 칸은 `<Reveal>` 로 펼친다(아래 내용을 툭 밀지 않는다).
@@ -65,7 +65,7 @@
 - **데이터셋 → 실행 → 그래프** 가 둘 이상 켜진 도메인에서는 세 화면 위에 같은 단계 표시(U3)가 뜬다(`App.tsx` `FLOW`). 절차에 화면을 더하면 `FLOW` 배열에 키를 더한다.
 - **불러오는 중** 화면은 0.3초 넘게 걸릴 때만 보인다(`main.tsx`).
 - **로그인·로그아웃 전환 화면** — 누른 순간부터 최소 1초 동안 「로그인하는 중입니다」「로그아웃하는 중입니다」가 덮여 새로고침 깜박임을 가린다(`lib/transition.ts` · `auth.tsx` 의 `beginTransition` · `App.tsx` 의 `endTransition`). 로그인 방식을 바꿔도 이 두 호출은 남긴다.
-- **방금 저장한 행 강조** — 입력·판정의 「최근 저장된 판정」과 결정 기록(D5)은 새 행이 한 번 옅게 강조된다. 새 목록에 붙이려면 `useFreshIds(ids)` 로 새 id 를 받아 그 행에 `className="sk-flash"`.
+- **방금 저장한 행 강조** — 입력·판정의 「최근 저장된 판정」과 결정 기록(D5)은 새 행이 한 번 옅게 강조된다. 새 목록에 붙이려면 `useFreshIds(ids)` 로 새 id 를 받아 그 행에 `className="app-flash"`.
 
 ## 화면 안내(온보딩) — 처음 온 사람에게 순서대로 짚어 준다
 처음 들어오면 나머지를 어둡게 하고 한 곳씩 밝혀 「여기서 무엇을 보고 무엇을 하는가」를 설명한다. 한 번 보면 브라우저에 「봤음」이 남아 다시 뜨지 않고, 도움말의 「화면 안내 다시 보기」로 다시 연다. Esc = 건너뛰기, ← → = 이전·다음.
@@ -73,7 +73,7 @@
 2. `target` 은 짚을 곳의 CSS 선택자. 상세 화면의 결정 바는 `'[data-tour="decision"]'`(단계에 `page` 로는 갈 수 없는 화면이라, 목록에서 한 건을 여는 흐름을 안내 글로 적는다). 요소에 `data-tour="이름"` 을 붙이고 `'[data-tour="이름"]'` 로 가리킨다(위젯 카드는 `'[data-widget="W9"]'`, AI 버튼은 `'[data-chat-open]'`). 이미 붙어 있는 것: `menu`(왼쪽 메뉴) · `filter`(기간·범위) · `metrics`(지표 카드) · `queue`(대시보드 표).
 3. 다른 화면의 것을 짚으려면 그 단계에 `page: '<화면 키>'` — 안내가 그 화면으로 옮긴 뒤 짚는다. 화면에 없는 `target` 은 자동으로 건너뛴다.
 4. 사람이 결정하는 자리(결정 바)와 결과를 검토하는 자리(결과 검토 카드)는 단계에 **꼭 넣는다** — 처음 보는 사람이 이 서비스의 핵심을 30초 안에 본다.
-5. 끄려면 목록을 빈 배열로. 직접 열려면 `startTour()`(`widgets/tour.tsx`). 「봤음」 표식은 `localStorage` 의 `sk-tour-seen:<도메인>`.
+5. 끄려면 목록을 빈 배열로. 직접 열려면 `startTour()`(`widgets/tour.tsx`). 「봤음」 표식은 `localStorage` 의 `app-tour-seen:<도메인>`.
 
 ## 결정 부품 연결 (AI·솔버가 제안하고 사람이 확정하는 화면)
 0. **목록의 요약 창과 상세 화면에는 이미 붙어 있다**(`components/item-decision.tsx` 의 `<ItemDecision id=… />` 하나를 두 곳이 같이 쓴다). 목록에서 ID 를 한 번 누르면 열리는 요약 창 맨 위에 결정 상자가 있어, 다른 화면으로 가지 않고 바로 결정한다. 상세 화면(`#/item/<ID>`)을 열어도 맨 위에 같은 상자가 있고, 저장은 입력·판정 화면과 같은 경로(`validate` → `makeDecision` → `saveDecision`)다. 판정 선택지 = `domain.json` `form.fields` 의 radio 칸 선택지, 사유 = textarea 칸, 그 밖의 칸(숫자 등) = 결정 바 안의 추가 입력. 그러니 **`form.fields` 만 과제에 맞게 바꾸면 결정 바가 따라온다**(예: 판정 선택지를 통과·재작업·보류로). 제안 문장은 지금 「적용 규칙」(`rulesFor`)이고 배지는 「규칙 제안」이다. AI·솔버가 낸 제안으로 바꾸면 `proposal`·`sourceLabel`·`confidence`·`basis` 를 그것으로 채운다. 결정된 건은 「사람의 결정: … · 누가 · 언제 · 사유」로 보이고, 보기 역할에게는 저장 칸이 없다.

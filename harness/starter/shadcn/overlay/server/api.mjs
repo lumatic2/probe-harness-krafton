@@ -66,7 +66,7 @@ export async function readJsonBody(req, max = MAX_BODY, emptyOk = false) {
   try { return JSON.parse(text) } catch { throw new HttpError(400, 'JSON 형식이 아닙니다.') }
 }
 
-const SESSION_COOKIE = 'sk_session' // auth.mjs 의 COOKIE 와 같은 이름
+const SESSION_COOKIE = 'app_session' // auth.mjs 의 COOKIE 와 같은 이름
 /**
  * @param {{
  *   root: string,

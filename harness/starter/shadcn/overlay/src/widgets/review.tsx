@@ -53,7 +53,7 @@ export function ExcludedNote({ total, groups, label = '계산에서 뺀 기록',
   return (
     <Collapsible data-excluded={n}>
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <Badge variant="outline" className="sk-urgent">{label} {n.toLocaleString('ko-KR')}건</Badge>
+        <Badge variant="outline" className="app-urgent">{label} {n.toLocaleString('ko-KR')}건</Badge>
         <span className="text-muted-foreground">{totalLabel} {total.toLocaleString('ko-KR')}건 중 {((n / total) * 100).toFixed(1)}%</span>
         <CollapsibleTrigger className="text-xs underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring">이유 보기</CollapsibleTrigger>
       </div>
@@ -94,7 +94,7 @@ export function SourceTag({ source }: { source: Source }) {
   return (
     <Popover>
       <PopoverTrigger className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`출처: ${label}`}>
-        <Badge variant="outline" className={`font-normal ${source.status === '잠정' ? 'border-dashed' : source.status === '환산' ? 'sk-urgent' : 'text-muted-foreground'}`}>{source.status ? `${source.status} · ` : ''}{source.name}</Badge>
+        <Badge variant="outline" className={`font-normal ${source.status === '잠정' ? 'border-dashed' : source.status === '환산' ? 'app-urgent' : 'text-muted-foreground'}`}>{source.status ? `${source.status} · ` : ''}{source.name}</Badge>
       </PopoverTrigger>
       <PopoverContent align="start" className="max-h-96 w-80 overflow-y-auto text-sm">
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">

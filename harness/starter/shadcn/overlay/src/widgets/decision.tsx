@@ -17,7 +17,7 @@ import { Reveal, useFreshIds } from '@/widgets/parts'
 export type EvidenceKind = 'measured' | 'predicted' | 'assumed'
 const EVIDENCE: Record<EvidenceKind, { label: string; cls: string }> = {
   measured: { label: '측정', cls: '' },
-  predicted: { label: '예측', cls: 'sk-urgent' },
+  predicted: { label: '예측', cls: 'app-urgent' },
   assumed: { label: '가정', cls: 'border-dashed text-muted-foreground' },
 }
 export function EvidenceTag({ kind, note }: { kind: EvidenceKind; note?: string }) {
@@ -75,7 +75,7 @@ export function TraceSteps({ steps }: { steps: TraceStep[] }) {
       {steps.map((s, i) => (
         <li key={s.title} className="flex gap-3 pb-4 last:pb-0">
           <div className="flex flex-col items-center">
-            <span className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums ${s.status === 'warn' ? 'sk-urgent' : s.status === 'skipped' ? 'text-muted-foreground' : ''}`}>{i + 1}</span>
+            <span className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums ${s.status === 'warn' ? 'app-urgent' : s.status === 'skipped' ? 'text-muted-foreground' : ''}`}>{i + 1}</span>
             {i < steps.length - 1 ? <span className="mt-1 w-px flex-1 bg-border" aria-hidden /> : null}
           </div>
           <div className="min-w-0 flex-1">
@@ -195,11 +195,11 @@ export function AuditLog({ entries, empty = '아직 결정 기록이 없습니�
             <TableHeader><TableRow><TableHead className="w-28">시각</TableHead><TableHead className="w-28">결정한 사람</TableHead><TableHead className="w-28">대상</TableHead><TableHead className="w-20">결정</TableHead><TableHead>사유·제안</TableHead></TableRow></TableHeader>
             <TableBody>
               {shown.map((e) => (
-                <TableRow key={e.id} className={fresh.has(e.id) ? 'sk-flash' : ''}>
+                <TableRow key={e.id} className={fresh.has(e.id) ? 'app-flash' : ''}>
                   <TableCell className="whitespace-nowrap tabular-nums text-muted-foreground">{e.at}</TableCell>
                   <TableCell className="whitespace-nowrap">{e.by}</TableCell>
                   <TableCell className="whitespace-nowrap">{e.target}</TableCell>
-                  <TableCell><Badge variant={options.find((o) => o.value === e.verdict)?.tone === 'ok' ? 'secondary' : 'outline'} className={options.find((o) => o.value === e.verdict)?.tone === 'urgent' ? 'sk-urgent' : ''}>{labelOf(options, e.verdict)}</Badge></TableCell>
+                  <TableCell><Badge variant={options.find((o) => o.value === e.verdict)?.tone === 'ok' ? 'secondary' : 'outline'} className={options.find((o) => o.value === e.verdict)?.tone === 'urgent' ? 'app-urgent' : ''}>{labelOf(options, e.verdict)}</Badge></TableCell>
                   <TableCell className="whitespace-normal text-sm">{e.reason || <span className="text-muted-foreground">—</span>}{e.proposal ? <div className="text-xs text-muted-foreground">제안: {e.proposal}</div> : null}</TableCell>
                 </TableRow>
               ))}

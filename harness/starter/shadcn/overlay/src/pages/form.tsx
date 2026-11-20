@@ -87,7 +87,7 @@ export default function Form() {
               <TableHeader><TableRow><TableHead>시각</TableHead><TableHead>{ctx.d.entity.singular}</TableHead>{fields.map((fl) => <TableHead key={fl.key} className={fl.type === 'number' ? 'text-right' : ''}>{fl.label.replace(/\s*\(.*\)$/, '')}</TableHead>)}</TableRow></TableHeader>
               <TableBody>
                 {recent.map((d) => (
-                  <TableRow key={d.id} className={fresh.has(d.id) ? 'sk-flash' : ''}>
+                  <TableRow key={d.id} className={fresh.has(d.id) ? 'app-flash' : ''}>
                     <TableCell className="whitespace-nowrap tabular-nums">{shortTs(d.ts)}</TableCell>
                     <TableCell><a className="hover:underline" href={`#/item/${d.ref}`}>{d.ref}</a></TableCell>
                     {fields.map((fl) => <TableCell key={fl.key} className={fl.type === 'number' ? 'text-right tabular-nums' : fl.type === 'textarea' ? 'min-w-40 whitespace-normal break-words' : ''}>{d[fl.key]}</TableCell>)}

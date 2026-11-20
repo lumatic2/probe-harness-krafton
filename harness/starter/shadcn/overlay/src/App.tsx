@@ -48,7 +48,7 @@ function Shell() {
   useEffect(() => { const name = Page ? PAGE_META[route.page]?.name : '없는 화면'; document.title = name ? `${name} · ${ctx.d.app.title}` : ctx.d.app.title }, [route.page, Page])
   useEffect(() => {
     let flag: string | null = null
-    try { flag = sessionStorage.getItem('sk-auth-toast'); if (flag?.startsWith('login:')) sessionStorage.removeItem('sk-auth-toast') } catch { /* 저장소가 막힌 틀 */ }
+    try { flag = sessionStorage.getItem('app-auth-toast'); if (flag?.startsWith('login:')) sessionStorage.removeItem('app-auth-toast') } catch { /* 저장소가 막힌 틀 */ }
     if (flag?.startsWith('login:')) { toast.success(`${flag.slice(6)} 님, 로그인했습니다`) } // 첫 화면 훑는 자리. 나머지 앱 toast 는 오른쪽 아래
   }, [])
   const scroller = useRef<HTMLDivElement>(null)
@@ -67,7 +67,7 @@ function Shell() {
       <SidebarInset className="min-h-0 overflow-hidden">
         <SiteHeader />
         <div className="flex min-h-0 flex-1">{/* 머리줄 아래: 본문(스크롤) | AI 패널 */}
-        <div ref={scroller} data-scroll className="sk-scroll min-h-0 min-w-0 flex-1 overflow-y-auto">
+        <div ref={scroller} data-scroll className="app-scroll min-h-0 min-w-0 flex-1 overflow-y-auto">
         <div className="@container/main flex min-w-0 flex-col gap-4 py-4 md:gap-6 md:py-6" data-page={route.page} data-title={PAGE_META[route.page]?.name}>
           {showFilter ? <FilterBar /> : null}
           {ctx.d.dataSource ? <div className="flex items-center gap-3 px-4 text-sm text-muted-foreground lg:px-6"><span>{ctx.d.dataSource.label || '연결 데이터'} · {ctx.rows.length}건</span><button className="underline" onClick={() => location.reload()}>새로고침</button></div> : null}
@@ -77,7 +77,7 @@ function Shell() {
         <ChatDock />{/* 본문 옆 칸. 본문이 스크롤돼도 움직이지 않는다 */}
         </div>
       </SidebarInset>
-      <Tour steps={TOUR} seenKey={`sk-tour-seen:${domainName}`} />
+      <Tour steps={TOUR} seenKey={`app-tour-seen:${domainName}`} />
       <Toaster position="top-center" offset={{ top: 68 }} />{/* 머리줄 바로 아래 가운데 — 오른쪽 아래는 AI 패널의 입력창과 표의 쪽 넘김을 가린다 */}
     </SidebarProvider>
   )

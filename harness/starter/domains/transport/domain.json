@@ -2,8 +2,8 @@
  "name": "transport",
  "import": {"maxKB": 500},
  "app": {"name": "물품 반송 병목", "title": "물품 반송 대기 현황", "question": "증설 또는 경로 조정을 검토할 구간은 어디인가", "asOf": "2026-10-28 09:00", "today": "2026-10-28",
-  "limit": "가상 데이터(실제 설비·스테이션과 무관) · 대기시간 = 요청~시작(이동 시간은 포함하지 않음) · 매일 02:00~03:00 점검 시간대 요청은 제외 · 대기 10분 이상 대기 김, 20분 이상 병목 · 같은 구간 기록이 적으면 평균이 흔들림 · 증설 효과나 원인은 데이터에 없음",
-  "help": "물류설비팀 · 내선 4740 · 가상 번호", "user": {"name": "물류설비팀", "email": "logistics@ops.example", "initials": "물류"}, "icon": "wrench"},
+  "limit": "가상 데이터(실제 시설·스테이션과 무관) · 대기시간 = 요청~시작(이동 시간은 포함하지 않음) · 매일 02:00~03:00 점검 시간대 요청은 제외 · 대기 10분 이상 대기 김, 20분 이상 병목 · 같은 구간 기록이 적으면 평균이 흔들림 · 증설 효과나 원인은 데이터에 없음",
+  "help": "물류운영팀 · 내선 4740 · 가상 번호", "user": {"name": "물류운영팀", "email": "logistics@ops.example", "initials": "물류"}, "icon": "wrench"},
  "entity": {"singular": "반송", "plural": "반송", "unit": "건", "idLabel": "반송 ID", "searchHint": "반송 ID·구간·스테이션 검색", "ownerLabel": "출발 스테이션"},
  "cols": [
   {"key": "tr_id", "label": "반송 ID", "type": "text", "width": 104},
@@ -56,7 +56,7 @@
  "control": {"title": "일별 병목 반송 건수 관리도", "metric": "bottleneck", "k": 1.5, "days": 14},
  "dist": {"title": "대기시간 분포(점검 시간대 제외)", "value": {"col": "wait"}, "unit": "분", "label": "대기시간", "groupBy": "from", "where": {"!status": ["점검 제외"]}},
  "matrix": {"title": "출발×도착 평균 대기(분, 점검 시간대 제외)", "rows": "from", "cols": "to", "agg": "avg", "col": "wait", "unit": "분", "decimals": 1, "where": {"!status": ["점검 제외"]}},
- "form": {"title": "구간 조치 판단 입력", "intro": "병목 반송을 골라 경로 조정 검토 또는 관찰을 정하고 사유를 남기면 변경 이력에 쌓입니다.", "refLabel": "반송 ID", "refMsg": "존재하는 반송 ID 를 고르세요.", "openWhere": {"status": ["병목", "대기 김"]}, "who": "물류설비팀", "historyTitle": "최근 저장된 구간 판단", "emptyHistory": "저장된 구간 판단이 없습니다.", "itemHistoryTitle": "구간 판단 이력", "action": "구간 조치 판단 입력",
+ "form": {"title": "구간 조치 판단 입력", "intro": "병목 반송을 골라 경로 조정 검토 또는 관찰을 정하고 사유를 남기면 변경 이력에 쌓입니다.", "refLabel": "반송 ID", "refMsg": "존재하는 반송 ID 를 고르세요.", "openWhere": {"status": ["병목", "대기 김"]}, "who": "물류운영팀", "historyTitle": "최근 저장된 구간 판단", "emptyHistory": "저장된 구간 판단이 없습니다.", "itemHistoryTitle": "구간 판단 이력", "action": "구간 조치 판단 입력",
   "fields": [
    {"key": "decision", "label": "판단", "type": "radio", "options": ["경로 조정 검토", "관찰"], "required": true, "msg": "경로 조정 검토 또는 관찰을 선택하세요."},
    {"key": "reason", "label": "사유 (필수)", "type": "textarea", "required": true, "msg": "사유를 입력하세요."}]},

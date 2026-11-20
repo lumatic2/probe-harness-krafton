@@ -97,7 +97,7 @@ test('W14 관리도 입력: 기준선·한계·한계 밖 점·클릭 주소', (
 test('W15 분포 입력: 구간·중앙값·p90·그룹별 같은 구간', () => {
   const rows = [];
   const conf = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  conf.forEach((c, i) => rows.push({ doc_id: `D-${i}`, title: 't', abstract: '', applicant: i < 5 ? '한빛전자' : '에이원테크', filed: '2025-01-01', tags: ['패키징'], confidence: c, status: '미검토', received: '2026-10-28', due: '2026-10-31' }));
+  conf.forEach((c, i) => rows.push({ doc_id: `D-${i}`, title: 't', abstract: '', applicant: i < 5 ? '한빛전자' : '에이원테크', filed: '2025-01-01', tags: ['사용자 인터페이스'], confidence: c, status: '미검토', received: '2026-10-28', due: '2026-10-31' }));
   const ctx = withRows('documents', rows);
   const w = buildInputs(ctx, DEFAULT_STATE).w15;
   assert.equal(w.n, 10);
@@ -110,7 +110,7 @@ test('W15 분포 입력: 구간·중앙값·p90·그룹별 같은 구간', () =>
   assert.deepEqual(g['한빛전자'].counts, [1, 2, 2, 0, 0]);
   assert.deepEqual(g['에이원테크'].counts, [0, 0, 0, 2, 3]);
   assert.equal(g['한빛전자'].median, 30);
-  assert.equal(g['다온소재'].n, 0);
+  assert.equal(g['다온솔루션'].n, 0);
 });
 
 test('W15 분포 값 만들기: 시각 차(시간·일)와 시각의 시', () => {
@@ -123,7 +123,7 @@ test('W16 행렬 입력: 두 열 × 집계, 칸 주소는 두 값으로 거른 �
   const mk = (applicant, status, n) => Array.from({ length: n }, (_, i) => ({ doc_id: `${applicant}-${status}-${i}`, title: 't', abstract: '', applicant, filed: '2025-01-01', tags: [], confidence: 50 + n, status, received: '2026-10-28', due: '2026-10-31' }));
   const ctx = withRows('documents', [...mk('한빛전자', '미검토', 3), ...mk('한빛전자', '확정', 1), ...mk('에이원테크', '미검토', 2)]);
   const w = buildInputs(ctx, DEFAULT_STATE).w16;
-  assert.deepEqual(w.rowLabels, ['한빛전자', '에이원테크', '다온소재', '미래장비', '세진시스템']);
+  assert.deepEqual(w.rowLabels, ['한빛전자', '에이원테크', '다온솔루션', '미래시스템', '세진시스템']);
   assert.deepEqual(w.colLabels, ['미검토', '검토 중', '확정']);
   assert.deepEqual(w.values[0], [3, 0, 1]);
   assert.deepEqual(w.values[1], [2, 0, 0]);
@@ -158,7 +158,7 @@ test('where 숫자 비교: "<열" "> 열", 표·CSV 에서 hide 열 제외, tpl 
   assert.ok(low.length > 0 && low.every((r) => r.confidence < 70));
   assert.ok(ctx.rows.filter((r) => matchWhere(ctx, r, { '>confidence': 90 })).every((r) => r.confidence > 90));
   assert.ok(!tableCols(ctx, 'shadcn').some((c) => c.key === 'abstract'));
-  assert.equal(tpl(ctx, '{tags}', { tags: ['패키징', '공정 제어'] }), '패키징, 공정 제어');
+  assert.equal(tpl(ctx, '{tags}', { tags: ['사용자 인터페이스', '업무 자동화'] }), '사용자 인터페이스, 업무 자동화');
 });
 
 // ---------- 일정 격자 ----------
@@ -266,9 +266,9 @@ test('일정 배치: 하루 보기는 시간 비율 그대로, 주 보기는 최
 
 // ---------- 문서 검토 ----------
 const docRows = () => [
-  { doc_id: 'D1', title: 'a', abstract: 'x', applicant: '한빛전자', filed: '2025-01-01', tags: ['패키징'], confidence: 90, status: '미검토', received: '2026-10-28', due: '2026-10-31' },
-  { doc_id: 'D2', title: 'b', abstract: 'y', applicant: '한빛전자', filed: '2025-01-01', tags: ['패키징', '공정 제어'], confidence: 55, status: '미검토', received: '2026-10-28', due: '2026-10-31' },
-  { doc_id: 'D3', title: 'c', abstract: 'z', applicant: '에이원테크', filed: '2025-01-01', tags: ['회로 설계'], confidence: 60, status: '확정', received: '2026-10-28', due: '2026-10-31' },
+  { doc_id: 'D1', title: 'a', abstract: 'x', applicant: '한빛전자', filed: '2025-01-01', tags: ['사용자 인터페이스'], confidence: 90, status: '미검토', received: '2026-10-28', due: '2026-10-31' },
+  { doc_id: 'D2', title: 'b', abstract: 'y', applicant: '한빛전자', filed: '2025-01-01', tags: ['사용자 인터페이스', '업무 자동화'], confidence: 55, status: '미검토', received: '2026-10-28', due: '2026-10-31' },
+  { doc_id: 'D3', title: 'c', abstract: 'z', applicant: '에이원테크', filed: '2025-01-01', tags: ['네트워크 통신'], confidence: 60, status: '확정', received: '2026-10-28', due: '2026-10-31' },
 ];
 test('문서 검토: 불확실 큐(신뢰도 70 미만·확정 제외)는 신뢰도 낮은 순, 저장하면 확정 상태로 얹힌다', () => {
   const ctx = withRows('documents', docRows());
@@ -276,24 +276,24 @@ test('문서 검토: 불확실 큐(신뢰도 70 미만·확정 제외)는 신뢰
   assert.deepEqual(reviewList(ctx, {}, { filter: 'uncertain' }).map((r) => r.doc_id), ['D2']);
   assert.deepEqual(reviewList(ctx, {}).map((r) => r.doc_id), ['D2', 'D3', 'D1']);
   assert.deepEqual(reviewList(ctx, {}, { minConf: 60 }).map((r) => r.doc_id), ['D3', 'D1']);
-  assert.deepEqual(reviewList(ctx, {}, { q: '공정' }).map((r) => r.doc_id), ['D2']);
+  assert.deepEqual(reviewList(ctx, {}, { q: '자동화' }).map((r) => r.doc_id), ['D2']);
   assert.deepEqual(reviewCounts(ctx, {}), { all: 3, uncertain: 1, done: 1 });
-  const rec = makeRecord(cfg, ['패키징'], ' 요약과 청구항이 일치 ', '2026-10-28T09:00:00');
-  assert.deepEqual(rec, { tags: ['패키징'], reason: '요약과 청구항이 일치', status: '확정', ts: '2026-10-28T09:00:00', who: '지식재산 담당' });
+  const rec = makeRecord(cfg, ['사용자 인터페이스'], ' 요약과 청구항이 일치 ', '2026-10-28T09:00:00');
+  assert.deepEqual(rec, { tags: ['사용자 인터페이스'], reason: '요약과 청구항이 일치', status: '확정', ts: '2026-10-28T09:00:00', who: '지식재산 담당' });
   const saved = { D2: rec };
   assert.deepEqual(reviewCounts(ctx, saved), { all: 3, uncertain: 0, done: 2 });
-  assert.deepEqual(mergedRows(ctx, saved).find((r) => r.doc_id === 'D2').tags, ['패키징']);
+  assert.deepEqual(mergedRows(ctx, saved).find((r) => r.doc_id === 'D2').tags, ['사용자 인터페이스']);
   assert.equal(isUncertain(cfg, docRows()[1]), true);
 });
 test('문서 검토: 분류 칩 추가·삭제·중복 방지, 고를 수 있는 목록에서 이미 붙은 것 제외, 검증 문구', () => {
   const cfg = dom('documents').review;
-  assert.deepEqual(addTag(['패키징'], '공정 제어'), ['패키징', '공정 제어']);
-  assert.deepEqual(addTag(['패키징'], '패키징'), ['패키징']);
-  assert.deepEqual(removeTag(['패키징', '공정 제어'], '패키징'), ['공정 제어']);
-  assert.equal(tagChoices(cfg, ['패키징', '공정 제어']).length, cfg.taxonomy.length - 2);
-  assert.ok(!tagChoices(cfg, ['패키징']).includes('패키징'));
+  assert.deepEqual(addTag(['사용자 인터페이스'], '업무 자동화'), ['사용자 인터페이스', '업무 자동화']);
+  assert.deepEqual(addTag(['사용자 인터페이스'], '사용자 인터페이스'), ['사용자 인터페이스']);
+  assert.deepEqual(removeTag(['사용자 인터페이스', '업무 자동화'], '사용자 인터페이스'), ['업무 자동화']);
+  assert.equal(tagChoices(cfg, ['사용자 인터페이스', '업무 자동화']).length, cfg.taxonomy.length - 2);
+  assert.ok(!tagChoices(cfg, ['사용자 인터페이스']).includes('사용자 인터페이스'));
   assert.deepEqual(validateReview(cfg, [], ' '), { tags: '분류를 하나 이상 고르세요.', reason: '판정 사유를 입력하세요.' });
-  assert.deepEqual(validateReview(cfg, ['패키징'], '사유'), {});
+  assert.deepEqual(validateReview(cfg, ['사용자 인터페이스'], '사유'), {});
 });
 
 // ---------- 판정(AI 기능 페이지) ----------
@@ -301,7 +301,7 @@ test('판정: 고정 라벨·근거 문장은 규칙이 정하고, 같은 입력
   const ctx = makeCtx(dom('interview'), read('interview', 'sample.json'));
   const cfg = ctx.d.assist;
   const row = { q_id: 'Q-X', question: '질문', risk_terms: ['연봉', '복지'] };
-  const ans = '저는 새로운 기술을 배우는 일이 좋아서 지원했습니다. 솔직히 연봉도 중요하다고 생각합니다. 입사 후에는 공정 데이터를 다루고 싶습니다.';
+  const ans = '저는 새로운 기술을 배우는 일이 좋아서 지원했습니다. 솔직히 연봉도 중요하다고 생각합니다. 입사 후에는 업무 데이터를 다루고 싶습니다.';
   const a = judgeAnswer(cfg, row, ans);
   assert.equal(a.code, 'risk');
   assert.equal(a.label, '위험 표현 있음');
@@ -312,7 +312,7 @@ test('판정: 고정 라벨·근거 문장은 규칙이 정하고, 같은 입력
   assert.equal(a.count, 1);
   assert.deepEqual(judgeAnswer(cfg, row, ans), a);
   assert.deepEqual(judgeAnswer(cfg, row, `  ${ans}  `), a);
-  const safe = judgeAnswer(cfg, row, '저는 새로운 기술을 배우는 일이 좋아서 지원했습니다. 입사 후에는 공정 데이터를 다루고 싶습니다.');
+  const safe = judgeAnswer(cfg, row, '저는 새로운 기술을 배우는 일이 좋아서 지원했습니다. 입사 후에는 업무 데이터를 다루고 싶습니다.');
   assert.deepEqual([safe.code, safe.label, safe.terms], ['safe', '위험 표현 없음', []]);
   const short = judgeAnswer(cfg, row, '연봉이요.');
   assert.deepEqual([short.code, short.label, short.terms], ['short', '답변 부족', []]);
